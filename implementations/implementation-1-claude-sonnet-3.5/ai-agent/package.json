@@ -1,0 +1,31 @@
+{
+  "name": "ai-agent",
+  "version": "0.2.0",
+  "description": "AI news and learning resource aggregator with gamification features",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "server": "node src/server.js",
+    "fetch": "node src/index.js fetch",
+    "stats": "node src/index.js stats"
+  },
+  "keywords": [
+    "ai",
+    "news",
+    "aggregator",
+    "learning",
+    "rss"
+  ],
+  "author": "Claude Sonnet 3.5 (AI Reproducibility Experiment)",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "better-sqlite3": "^9.2.2",
+    "axios": "^1.6.5",
+    "rss-parser": "^3.13.0",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0"
+  }
+}

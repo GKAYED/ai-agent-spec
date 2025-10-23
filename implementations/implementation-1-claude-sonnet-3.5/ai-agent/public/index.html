@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News & Learning Resource Aggregator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fetch-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+
+        .fetch-btn:hover {
+            background: #059669;
+        }
+
+        .fetch-btn:disabled {
+            background: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f3f4f6;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .tab:hover {
+            background: #e5e7eb;
+        }
+
+        .tab.active {
+            color: #667eea;
+            background: white;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .item-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .item-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .item-card.checked {
+            opacity: 0.6;
+            background: #f9fafb;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 10px;
+        }
+
+        .item-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            text-decoration: none;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .item-title:hover {
+            color: #667eea;
+        }
+
+        .checkbox-container {
+            flex-shrink: 0;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .item-summary {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .item-source {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .item-date {
+            color: #9ca3af;
+        }
+
+        .vote-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .vote-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .vote-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .vote-btn.upvote:hover {
+            background: #dcfce7;
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .vote-btn.downvote:hover {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .journey-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .progress-circle {
+            width: 200px;
+            height: 200px;
+            margin: 30px auto;
+            position: relative;
+        }
+
+        .progress-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle .progress-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 15;
+        }
+
+        .progress-circle .progress-fill {
+            fill: none;
+            stroke: #667eea;
+            stroke-width: 15;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .milestones {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .milestone {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 12px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .milestone.achieved {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .milestone-count {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .milestone-label {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .top-sources {
+            margin-top: 40px;
+        }
+
+        .source-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 500px;
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                overflow-x: auto;
+            }
+
+            .tab {
+                flex: none;
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                🤖 AI News & Learning Resource Aggregator
+            </h1>
+            <div class="stats-bar" id="statsBar">
+                <div class="stat">📊 Total: <strong id="statTotal">0</strong></div>
+                <div class="stat">✅ Checked: <strong id="statChecked">0</strong></div>
+                <div class="stat">📰 News: <strong id="statNews">0</strong></div>
+                <div class="stat">🎓 Courses: <strong id="statCourses">0</strong></div>
+                <div class="stat">📚 Reading: <strong id="statReading">0</strong></div>
+            </div>
+            <button class="fetch-btn" id="fetchBtn">🔄 Fetch New Content</button>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="all">All</button>
+            <button class="tab" data-tab="news">News</button>
+            <button class="tab" data-tab="courses">Courses</button>
+            <button class="tab" data-tab="reading">Reading</button>
+            <button class="tab" data-tab="journey">Journey</button>
+        </div>
+
+        <div class="content" id="content"></div>
+    </div>
+
+    <div class="modal" id="celebrationModal">
+        <div class="modal-content">
+            <h2>🎉 Milestone Achieved!</h2>
+            <p id="milestoneText" style="font-size: 24px; margin: 20px 0;"></p>
+            <img id="celebrationGif" src="" alt="Celebration">
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+        let currentTab = 'all';
+        let items = [];
+        let lastCheckedCount = 0;
+
+        const celebrationGifs = [
+            'https://media.giphy.com/media/g9582DNuQppxC/giphy.gif',
+            'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
+            'https://media.giphy.com/media/l4HnKwiJJaJQB04Zq/giphy.gif',
+            'https://media.giphy.com/media/kyLYXonQYYfwYDIeZl/giphy.gif',
+            'https://media.giphy.com/media/26u4cqiYI30juCOGY/giphy.gif'
+        ];
+
+        // Initialize
+        async function init() {
+            await loadStats();
+            await loadItems();
+            setupEventListeners();
+            checkMilestone();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+            });
+
+            document.getElementById('fetchBtn').addEventListener('click', fetchContent);
+            document.getElementById('celebrationModal').addEventListener('click', closeCelebration);
+        }
+
+        // Switch tabs
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+            if (tab === 'journey') {
+                renderJourney();
+            } else {
+                renderItems();
+            }
+        }
+
+        // Load statistics
+        async function loadStats() {
+            try {
+                const response = await fetch(`${API_BASE}/stats`);
+                const stats = await response.json();
+
+                document.getElementById('statTotal').textContent = stats.total;
+                document.getElementById('statChecked').textContent = stats.checked;
+                document.getElementById('statNews').textContent = stats.news;
+                document.getElementById('statCourses').textContent = stats.courses;
+                document.getElementById('statReading').textContent = stats.reading;
+
+                return stats.checked;
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+                return 0;
+            }
+        }
+
+        // Load items
+        async function loadItems(category = null) {
+            try {
+                let url = `${API_BASE}/items`;
+                if (category) {
+                    url += `?category=${category}`;
+                }
+
+                const response = await fetch(url);
+                items = await response.json();
+                renderItems();
+            } catch (error) {
+                console.error('Failed to load items:', error);
+            }
+        }
+
+        // Render items
+        function renderItems() {
+            const content = document.getElementById('content');
+            let filteredItems = items;
+
+            if (currentTab !== 'all') {
+                filteredItems = items.filter(item => item.category === currentTab);
+            }
+
+            if (filteredItems.length === 0) {
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No items found</h3>
+                        <p>Click "Fetch New Content" to load items</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const html = `
+                <div class="items-grid">
+                    ${filteredItems.map(item => `
+                        <div class="item-card ${item.checked ? 'checked' : ''}">
+                            <div class="item-header">
+                                <a href="${item.url}" target="_blank" class="item-title">${item.title}</a>
+                                <div class="checkbox-container">
+                                    <input type="checkbox" class="checkbox" 
+                                           ${item.checked ? 'checked' : ''} 
+                                           onchange="toggleItem(${item.id})">
+                                </div>
+                            </div>
+                            ${item.summary ? `<div class="item-summary">${item.summary}</div>` : ''}
+                            <div class="item-meta">
+                                <span class="item-source">${item.source}</span>
+                                <span class="item-date">${formatDate(item.date)}</span>
+                            </div>
+                            <div class="vote-buttons">
+                                <button class="vote-btn upvote" onclick="vote(${item.id}, 'up')">
+                                    👍 ${item.upvotes}
+                                </button>
+                                <button class="vote-btn downvote" onclick="vote(${item.id}, 'down')">
+                                    👎 ${item.downvotes}
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            content.innerHTML = html;
+        }
+
+        // Render journey
+        async function renderJourney() {
+            try {
+                const response = await fetch(`${API_BASE}/journey`);
+                const journey = await response.json();
+
+                const topSourcesResponse = await fetch(`${API_BASE}/sources/top?limit=5`);
+                const topSources = await topSourcesResponse.json();
+
+                const percentage = (journey.totalChecked / 100) * 100;
+                const circumference = 2 * Math.PI * 85;
+                const offset = circumference - (percentage / 100) * circumference;
+
+                const content = document.getElementById('content');
+                content.innerHTML = `
+                    <div class="journey-container">
+                        <h2 style="color: #667eea; margin-bottom: 10px;">Your Learning Journey</h2>
+                        <p style="color: #6b7280; margin-bottom: 30px;">Track your progress and achievements</p>
+
+                        <div class="progress-circle">
+                            <svg width="200" height="200">
+                                <circle class="progress-bg" cx="100" cy="100" r="85"></circle>
+                                <circle class="progress-fill" cx="100" cy="100" r="85"
+                                        stroke-dasharray="${circumference}"
+                                        stroke-dashoffset="${offset}"></circle>
+                            </svg>
+                            <div class="progress-text">${journey.totalChecked}</div>
+                        </div>
+
+                        <h3 style="margin-top: 20px; color: #1f2937;">Items Completed</h3>
+
+                        <div class="milestones">
+                            ${journey.milestones.map(m => `
+                                <div class="milestone ${m.achieved ? 'achieved' : ''}">
+                                    <div class="milestone-count">${m.count}</div>
+                                    <div class="milestone-label">${m.achieved ? '✓ Achieved' : 'Goal'}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        ${topSources.length > 0 ? `
+                            <div class="top-sources">
+                                <h3 style="color: #1f2937; margin-bottom: 20px;">Top Sources (by net votes)</h3>
+                                ${topSources.map((source, i) => `
+                                    <div class="source-item">
+                                        <span>${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '📊'} ${source.source}</span>
+                                        <strong style="color: #667eea;">${source.netVotes} votes</strong>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Failed to load journey:', error);
+            }
+        }
+
+        // Toggle item checked state
+        async function toggleItem(id) {
+            try {
+                const response = await fetch(`${API_BASE}/items/${id}/toggle`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    const item = items.find(i => i.id === id);
+                    if (item) {
+                        item.checked = result.checked;
+                    }
+
+                    const newCheckedCount = await loadStats();
+                    checkMilestone(newCheckedCount);
+                    renderItems();
+                }
+            } catch (error) {
+                console.error('Failed to toggle item:', error);
+            }
+        }
+
+        // Vote on item
+        async function vote(id, type) {
+            try {
+                const response = await fetch(`${API_BASE}/items/${id}/vote`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    const item = items.find(i => i.id === id);
+                    if (item) {
+                        item.upvotes = result.upvotes;
+                        item.downvotes = result.downvotes;
+                    }
+                    renderItems();
+                }
+            } catch (error) {
+                console.error('Failed to vote:', error);
+            }
+        }
+
+        // Fetch new content
+        async function fetchContent() {
+            const btn = document.getElementById('fetchBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Fetching...';
+
+            try {
+                const response = await fetch(`${API_BASE}/fetch`, { method: 'POST' });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(`✓ Fetched ${result.count} new items in ${result.duration}s`);
+                    await loadStats();
+                    await loadItems();
+                }
+            } catch (error) {
+                console.error('Failed to fetch:', error);
+                alert('✗ Fetch failed. Check console for details.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔄 Fetch New Content';
+            }
+        }
+
+        // Check for milestone achievement
+        function checkMilestone(newCount) {
+            if (!newCount) return;
+
+            const milestones = [5, 10, 20, 50, 100];
+            const achievedMilestone = milestones.find(m => 
+                newCount >= m && lastCheckedCount < m
+            );
+
+            if (achievedMilestone) {
+                showCelebration(achievedMilestone);
+            }
+
+            lastCheckedCount = newCount;
+        }
+
+        // Show celebration modal
+        function showCelebration(milestone) {
+            const modal = document.getElementById('celebrationModal');
+            const text = document.getElementById('milestoneText');
+            const gif = document.getElementById('celebrationGif');
+
+            text.textContent = `${milestone} Items Completed!`;
+            gif.src = celebrationGifs[Math.floor(Math.random() * celebrationGifs.length)];
+            
+            modal.classList.add('show');
+            setTimeout(() => modal.classList.remove('show'), 3000);
+        }
+
+        // Close celebration modal
+        function closeCelebration() {
+            document.getElementById('celebrationModal').classList.remove('show');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'No date';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+
+        // Initialize app
+        init();
+    </script>
+</body>
+</html>

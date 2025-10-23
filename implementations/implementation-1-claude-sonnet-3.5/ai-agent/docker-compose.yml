@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  ai-agent:
+    build: .
+    container_name: ai-agent
+    ports:
+      - "3000:3000"
+    volumes:
+      - ai-agent-data:/app/data
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    restart: unless-stopped
+
+volumes:
+  ai-agent-data:
+    driver: local
