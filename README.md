@@ -6,7 +6,8 @@ This repository contains **complete, AI-readable specifications** for the AI New
 
 **Phase 2 Experiment**: Test if a fresh AI conversation can recreate a fully-functional application using only these specifications, without access to the original implementation or conversation history.
 
-**Original Project** (Phase 1): Built in 3 hours through conversational AI, resulting in 28 files, 2,421+ AI resources aggregated, full Docker deployment.
+**Original Project** (Phase 1): Built in 3 hours through conversational AI, resulting in 28 files, 2,421+ AI resources aggregated, full Docker deployment.  
+🔗 **GitHub Repository**: https://github.com/GKAYED/ai-news-agent
 
 ---
 
@@ -213,7 +214,8 @@ Create `EXPERIMENT-RESULTS.md` with:
 
 ## 📚 Original Project (Phase 1)
 
-**Location**: `C:\workspace\ai-agent`  
+**GitHub Repository**: https://github.com/GKAYED/ai-news-agent  
+**Local Location**: `C:\workspace\ai-agent`  
 **Created**: October 15-22, 2024  
 **Method**: Conversational AI (GitHub Copilot)  
 **Time**: 3 hours of conversation  
