@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🤖 AI News & Learning Hub</title>
+  <style>
+    :root {
+      --bg: #0f1320; --card: #151a2b; --text: #e6e9f2; --muted: #9aa4c7; --accent: #6ea8fe;
+      --news: #ffcc66; --courses: #7bd389; --reading: #9bbcff;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); }
+    header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 16px 20px; gap: 12px; border-bottom: 1px solid #1e2540; }
+    h1 { font-size: 20px; margin: 0; }
+    #fetch-btn { background: var(--accent); color: #0b1220; border: 0; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    #fetch-btn:disabled { opacity: .6; cursor: wait; }
+    #stats-bar span { margin-right: 12px; color: var(--muted); }
+    nav { display: flex; gap: 8px; padding: 10px 20px; border-bottom: 1px solid #1e2540; }
+    .tab { background: transparent; color: var(--text); border: 1px solid #2a3358; padding: 8px 12px; border-radius: 999px; cursor: pointer; }
+    .tab.active { background: #1a2140; border-color: #3a4780; }
+    main { padding: 20px; max-width: 1200px; margin: 0 auto; }
+    #items-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+    .item-card { background: var(--card); border: 1px solid #1e2540; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .item-header { display: flex; gap: 10px; align-items: flex-start; }
+    .item-header h3 { margin: 0; font-size: 16px; line-height: 1.3; }
+    .item-header a { color: var(--text); text-decoration: none; }
+    .summary { color: var(--muted); font-size: 14px; margin: 0; }
+    .item-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
+    .votes button { background: #0e1428; border: 1px solid #273058; color: var(--text); border-radius: 8px; padding: 6px 10px; cursor: pointer; margin-left: 6px; }
+    .empty { color: var(--muted); text-align: center; }
+    .badge { padding: 2px 8px; border-radius: 999px; font-size: 12px; }
+    .badge.news { background: #2b2311; color: var(--news); }
+    .badge.courses { background: #152314; color: var(--courses); }
+    .badge.reading { background: #121a2c; color: var(--reading); }
+
+    /* Journey */
+    #journey-view { display: none; }
+    .journey-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .progress-circle { background: var(--card); border: 1px solid #1e2540; border-radius: 12px; padding: 24px; text-align: center; }
+    .progress-count { display: block; font-size: 36px; font-weight: 800; }
+    .progress-label { display: block; color: var(--muted); }
+    .milestones, .top-sources { background: var(--card); border: 1px solid #1e2540; border-radius: 12px; padding: 16px; }
+    .milestone { padding: 8px 10px; border-radius: 8px; margin: 6px 0; background: #0f1428; color: var(--muted); }
+    .milestone.achieved { background: #132347; color: #b5cffc; }
+
+    /* Celebration modal */
+    #celebration-modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; }
+    #celebration-modal .modal-content { background: #0f1428; border: 1px solid #273058; padding: 20px; border-radius: 12px; width: min(520px, 92vw); text-align: center; }
+    #celebration-modal img { max-width: 100%; border-radius: 8px; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🤖 AI News & Learning Hub</h1>
+  <div id="stats-bar"></div>
+  <button id="fetch-btn">🔄 Fetch New Content</button>
+</header>
+
+<nav id="tabs">
+  <button class="tab active" data-filter="all">All</button>
+  <button class="tab" data-filter="news">📰 News</button>
+  <button class="tab" data-filter="courses">🎓 Courses</button>
+  <button class="tab" data-filter="reading">📚 Reading</button>
+  <button class="tab" data-filter="journey">🚀 Journey</button>
+</nav>
+
+<main id="content">
+  <div id="items-container"></div>
+  <div id="journey-view"></div>
+</main>
+
+<div id="celebration-modal">
+  <div class="modal-content">
+    <h2>🎉 Milestone Achieved!</h2>
+    <p id="milestone-text"></p>
+    <img id="celebration-gif" src="" alt="Celebration" />
+  </div>
+</div>
+
+<script>
+const celebrationGIFs = [
+  'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif',
+  'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
+  'https://media.giphy.com/media/111ebonMs90YLu/giphy.gif',
+  'https://media.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif',
+  'https://media.giphy.com/media/OkJat1YNdoD3W/giphy.gif'
+];
+
+function formatDate(dateString) {
+  if (!dateString) return '';
+  const d = new Date(dateString);
+  if (isNaN(d.getTime())) return '';
+  return d.toLocaleDateString(undefined, { month: 'short', day: '2-digit', year: 'numeric' });
+}
+
+async function updateStats() {
+  const res = await fetch('/api/stats');
+  const stats = await res.json();
+  const bar = document.getElementById('stats-bar');
+  bar.innerHTML = `
+    <span>Total: ${stats.total}</span>
+    <span>✓ Checked: ${stats.checked}</span>
+    <span>📰 News: ${stats.news}</span>
+    <span>🎓 Courses: ${stats.courses}</span>
+    <span>📚 Reading: ${stats.reading}</span>
+  `;
+}
+
+async function fetchItems(filters = {}) {
+  const params = new URLSearchParams(filters);
+  const res = await fetch(`/api/items?${params.toString()}`);
+  return res.json();
+}
+
+function renderItems(items) {
+  const container = document.getElementById('items-container');
+  if (!items.length) {
+    container.innerHTML = '<p class="empty">No items found.</p>';
+    return;
+  }
+  container.innerHTML = items.map((item) => `
+    <div class="item-card">
+      <div class="item-header">
+        <input type="checkbox" id="check-${item.id}" ${item.checked ? 'checked' : ''} onchange="toggleItem(${item.id})" />
+        <div>
+          <h3><a href="${item.url || '#'}" target="_blank" rel="noopener">${item.title}</a></h3>
+          <span class="badge ${item.category}">${item.category}</span>
+        </div>
+      </div>
+      <p class="summary">${(item.summary || '').slice(0, 220)}</p>
+      <div class="item-footer">
+        <span class="source">${item.source || ''}</span>
+        <span class="date">${formatDate(item.date)}</span>
+        <div class="votes">
+          <button onclick="voteItem(${item.id}, 'up')">👍 ${item.upvotes}</button>
+          <button onclick="voteItem(${item.id}, 'down')">👎 ${item.downvotes}</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function loadItems(filter = 'all') {
+  const filters = filter === 'all' ? {} : { category: filter };
+  const items = await fetchItems(filters);
+  renderItems(items);
+}
+
+async function fetchNewContent() {
+  const btn = document.getElementById('fetch-btn');
+  btn.disabled = true; btn.textContent = '⏳ Fetching...';
+  try {
+    const res = await fetch('/api/fetch', { method: 'POST' });
+    const data = await res.json();
+    await updateStats();
+    await loadItems(getActiveFilter());
+    alert(`Fetched ${data.count} new items!`);
+  } catch (e) {
+    alert('Fetch failed. Please try again.');
+  } finally {
+    btn.disabled = false; btn.textContent = '🔄 Fetch New Content';
+  }
+}
+
+async function toggleItem(id) {
+  const checkbox = document.getElementById(`check-${id}`);
+  const original = checkbox.checked;
+  try {
+    const res = await fetch(`/api/items/${id}/toggle`, { method: 'POST' });
+    const data = await res.json();
+    checkbox.checked = data.checked === 1;
+    await updateStats();
+    await checkMilestone();
+  } catch (e) {
+    checkbox.checked = original;
+    alert('Failed to update item.');
+  }
+}
+
+async function voteItem(id, type) {
+  try {
+    const res = await fetch(`/api/items/${id}/vote`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type })
+    });
+    const data = await res.json();
+    const card = document.querySelector(`#check-${id}`).closest('.item-card');
+    const buttons = card.querySelectorAll('.votes button');
+    buttons[0].textContent = `👍 ${data.upvotes}`;
+    buttons[1].textContent = `👎 ${data.downvotes}`;
+  } catch (e) {
+    alert('Failed to vote.');
+  }
+}
+
+function getActiveFilter() {
+  const active = document.querySelector('.tab.active');
+  return active ? active.dataset.filter : 'all';
+}
+
+async function switchTab(filter) {
+  document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+  document.querySelector(`.tab[data-filter="${filter}"]`).classList.add('active');
+  const itemsContainer = document.getElementById('items-container');
+  const journeyView = document.getElementById('journey-view');
+  if (filter === 'journey') {
+    itemsContainer.style.display = 'none';
+    journeyView.style.display = 'block';
+    await loadJourney();
+  } else {
+    itemsContainer.style.display = 'grid';
+    journeyView.style.display = 'none';
+    await loadItems(filter);
+  }
+}
+
+async function loadJourney() {
+  const [journeyRes, sourcesRes] = await Promise.all([
+    fetch('/api/journey'), fetch('/api/sources/top')
+  ]);
+  const journey = await journeyRes.json();
+  const topSources = await sourcesRes.json();
+  const view = document.getElementById('journey-view');
+  view.innerHTML = `
+    <div class="journey-stats">
+      <div class="progress-circle">
+        <span class="progress-count">${journey.totalChecked}</span>
+        <span class="progress-label">Items Completed</span>
+      </div>
+      <div class="milestones">
+        <h3>Milestones</h3>
+        ${journey.milestones.map((m) => `
+          <div class="milestone ${m.achieved ? 'achieved' : ''}">${m.achieved ? '✅' : '⭕'} ${m.count} Items</div>
+        `).join('')}
+      </div>
+      <div class="top-sources">
+        <h3>Top Sources</h3>
+        <ol>
+          ${topSources.slice(0, 5).map((s) => `<li>${s.source} <span class="net-votes">(+${s.netVotes})</span></li>`).join('')}
+        </ol>
+      </div>
+    </div>
+  `;
+}
+
+async function checkMilestone() {
+  const res = await fetch('/api/journey');
+  const journey = await res.json();
+  const total = journey.totalChecked || 0;
+  const milestones = [5,10,20,50,100];
+  const last = parseInt(localStorage.getItem('lastMilestone') || '0', 10);
+  for (const m of milestones) {
+    if (total >= m && last < m) {
+      showCelebration(m);
+      localStorage.setItem('lastMilestone', String(m));
+      break;
+    }
+  }
+}
+
+function showCelebration(milestone) {
+  const modal = document.getElementById('celebration-modal');
+  const text = document.getElementById('milestone-text');
+  const gif = document.getElementById('celebration-gif');
+  text.textContent = `${milestone} Items Completed! 🎉`;
+  gif.src = celebrationGIFs[Math.floor(Math.random()*celebrationGIFs.length)];
+  modal.style.display = 'flex';
+  setTimeout(() => { modal.style.display = 'none'; }, 3000);
+}
+
+document.getElementById('celebration-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'celebration-modal') e.target.style.display = 'none';
+});
+
+document.querySelectorAll('.tab').forEach((tab) => {
+  tab.addEventListener('click', () => switchTab(tab.dataset.filter));
+});
+
+document.getElementById('fetch-btn').addEventListener('click', fetchNewContent);
+
+async function init() {
+  await updateStats();
+  await loadItems('all');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

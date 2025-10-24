@@ -1,0 +1,11 @@
+node_modules
+.git
+.gitignore
+README.md
+QUICKSTART.md
+SETUP.md
+RESOURCES.md
+CHANGELOG.md
+data/*.db
+data/*.db-shm
+data/*.db-wal
