@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/server.js",
+    "start:3010": "cross-env PORT=3010 node src/server.js",
     "server": "node src/server.js",
     "fetch": "node src/index.js fetch",
     "stats": "node src/index.js stats"
@@ -16,7 +17,8 @@
     "better-sqlite3": "^9.2.2",
     "chalk": "^4.1.2",
     "cheerio": "^1.0.0-rc.12",
-  "commander": "^4.1.1",
+    "commander": "^4.1.1",
+    "cross-env": "^7.0.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "rss-parser": "^3.13.0"
