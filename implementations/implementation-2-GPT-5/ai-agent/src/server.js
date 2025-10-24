@@ -8,7 +8,7 @@ const { categorizeAll } = require('./organizer');
 const { fetchAllRSS } = require('./sources/rssSource');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3010;
 
 app.use(cors());
 app.use(express.json());
@@ -97,6 +97,15 @@ app.get('/api/journey', (req, res) => {
     console.error(chalk.red('Journey error:'), error.message);
     res.status(500).json({ error: 'Failed to get journey stats' });
   }
+});
+
+// Health check
+app.get('/healthz', (req, res) => res.send('ok'));
+
+// SPA fallback to serve index.html for any non-API route
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) return next();
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
