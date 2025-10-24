@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2025-10-24",
+  "implementationPath": "implementations/implementation-2-GPT-5/ai-agent",
+  "ports": { "default": 3000, "local": 3010, "docker": 3000 },
+  "stats": {
+    "totalItems": 1707,
+    "checked": 0,
+    "categories": {
+      "news": 906,
+      "courses": 5,
+      "reading": 796
+    }
+  },
+  "notes": [
+    "commander pinned to ^4.1.1",
+    "rss fetching concurrency set to 5",
+    "deduplication by normalized URL"
+  ]
+}
