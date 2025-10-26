@@ -808,4 +808,7 @@ Philosophy: "Build the minimum that works"
 
 *This 3-model comparison demonstrates that specification-driven development with AI enables consistent outcomes across different vendors when models prioritize specification completeness. Critical insight: Not all AI models interpret specifications with equal fidelity—choose wisely for production deployments.*
 
-*For detailed Gemini-specific analysis, see [GEMINI-ANALYSIS.md](GEMINI-ANALYSIS.md)*
+*For detailed model-specific analyses, see:*
+- *[Claude Sonnet 4.5 Analysis](implementation-1-claude-sonnet-4.5/IMPLEMENTATION-ANALYSIS.md)*
+- *[GPT-5 Analysis](implementation-2-GPT-5/IMPLEMENTATION-ANALYSIS.md)*
+- *[Gemini 2.5 Pro Analysis](implementation-3-Gemini-2.5-pro/IMPLEMENTATION-ANALYSIS.md)*
