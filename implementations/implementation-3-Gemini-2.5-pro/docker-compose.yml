@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  ai-agent:
+    build: .
+    ports:
+      - "3020:3020"
+    volumes:
+      - ./data:/usr/src/app/data
+    environment:
+      - NODE_ENV=development
+      - PORT=3020
