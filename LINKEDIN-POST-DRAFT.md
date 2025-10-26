@@ -1,12 +1,14 @@
 # LinkedIn Post Draft: AI Specification-Driven Development Experiment
 
+**Context:** This is the second experiment in a series exploring AI-driven development. [Experiment 1](https://www.linkedin.com/posts/ghaithkayed_github-gkayedai-news-agent-an-intelligent-activity-7386586358481465344-eNFQ) demonstrated conversational AI development (Claude Sonnet 4, 3 hours, production-ready). Experiment 2 tests if specifications can replicate this success across multiple AI models.
+
 ---
 
 ## Version 1: Executive Summary (Short Form)
 
 🚀 **I just tested whether AI can build production software from specifications alone. The results are stunning.**
 
-I created comprehensive specs for an AI News Aggregator (75K characters, 4 documents) and gave them to Claude Sonnet 4.5 with a single prompt: "Build this."
+After successfully building an AI News Aggregator conversationally in 3 hours ([Experiment 1](https://github.com/GKAYED/ai-news-agent)), I reverse-engineered it into comprehensive specs (75K characters, 4 documents) and gave them to **three different AI models** with a single prompt: "Build this."
 
 **Results (3 AI Models Tested):**
 - ⏱️ **Claude: 1.1 hours** | **GPT-5: ~1.5 hours** | **Gemini: ~1.5 hours**
@@ -40,11 +42,13 @@ Full experiment details: https://github.com/GKAYED/ai-agent-spec
 
 **Can AI models independently build production software from specifications alone?**
 
-I ran an experiment to find out. Here's what I learned:
+After my [first experiment](https://www.linkedin.com/posts/ghaithkayed_github-gkayedai-news-agent-an-intelligent-activity-7386586358481465344-eNFQ) where I built an AI News Aggregator conversationally with Claude Sonnet 4 in 3 hours, I wanted to test if this success could be **formalized and replicated** across different AI models.
+
+Here's what I learned:
 
 **🔬 The Experiment:**
 
-1. Reverse-engineered an existing AI News Aggregator into 4 specification documents (~75,000 characters) using GitHub Spec Kit framework
+1. Reverse-engineered the [original conversational project](https://github.com/GKAYED/ai-news-agent) into 4 specification documents (~75,000 characters) using GitHub Spec Kit framework
 2. Created fresh chats with **three AI models**: Claude Sonnet 4.5, GPT-5, and Gemini 2.5 Pro
 3. Provided ONLY the specifications (no code, no hand-holding)
 4. Asked: "Implement this complete project"
@@ -110,19 +114,19 @@ https://github.com/GKAYED/ai-agent-spec
 
 ## Version 3: Story-Driven (Long Form)
 
-**I gave an AI model a 75,000-character specification and asked it to build an entire application. What happened next changed how I think about software development.**
+**I gave three AI models a 75,000-character specification and asked them to build an entire application. What happened next changed how I think about software development.**
 
 **The Setup:**
 
-Three weeks ago, I built an AI News & Learning Resource Aggregator in a 3-hour conversational session with GitHub Copilot. It worked beautifully—32 files, REST API, SQLite database, Docker deployment, the works.
+A few weeks ago, I built an AI News & Learning Resource Aggregator through conversational prompting with Claude Sonnet 4 in a 3-hour session ([see Experiment 1](https://www.linkedin.com/posts/ghaithkayed_github-gkayedai-news-agent-an-intelligent-activity-7386586358481465344-eNFQ)). It worked beautifully—28 files, REST API, SQLite database, Docker deployment, 2,421+ AI resources aggregated. ([GitHub repo](https://github.com/GKAYED/ai-news-agent))
 
-But I had a question: **Could an AI model reproduce this project from specifications alone, without any hand-holding?**
+But I had a question: **Could this success be formalized into specifications that ANY AI model could use to reproduce the project independently?**
 
 **The Experiment:**
 
 **Phase 1: Creating the Specifications (2.3 hours)**
 
-I reverse-engineered my project into comprehensive specifications using GitHub Spec Kit:
+I reverse-engineered the [original conversational project](https://github.com/GKAYED/ai-news-agent) into comprehensive specifications using GitHub Spec Kit:
 - `constitution.md` - Core values, principles, architecture patterns
 - `specification.md` - User stories, API contracts, database schema  
 - `plan.md` - Technology stack, implementation strategy

@@ -25,7 +25,16 @@ This experiment explored whether comprehensive specifications enable AI models t
 
 ### Background & Motivation
 
-We started with an existing project (AI News & Learning Resource Aggregator) built conversationally over **3 hours** in Phase 1. The question: Could we formalize this into specifications that enable AI models to reproduce it independently?
+**This is Experiment 2** in a series exploring AI-driven development methodologies.
+
+**Experiment 1** (Conversational Approach): Built an AI News & Learning Resource Aggregator through conversational prompting with Claude Sonnet 4 over **3 hours**, resulting in a production-ready application with 28 files, 2,421+ aggregated AI resources, and full Docker deployment.
+
+🔗 **Experiment 1 Repository**: https://github.com/GKAYED/ai-news-agent  
+🔗 **Experiment 1 LinkedIn Post**: https://www.linkedin.com/posts/ghaithkayed_github-gkayedai-news-agent-an-intelligent-activity-7386586358481465344-eNFQ
+
+**Experiment 2** (Specification-Driven Approach): The success of Experiment 1 raised a critical question: Could we formalize the conversational knowledge into comprehensive specifications that enable **any AI model** to reproduce the project independently, without access to the original implementation or conversation history?
+
+This experiment tests specification-driven development across three leading AI models from different vendors.
 
 ### Hypothesis
 

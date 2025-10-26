@@ -6,8 +6,9 @@ This repository contains **complete, AI-readable specifications** for the AI New
 
 **Multi-Model Experiment (Phase 2)**: Test if AI models from different vendors can recreate a fully-functional application using only specifications, without access to original implementation or conversation history.
 
-**Original Project** (Phase 1): Built in 3 hours through conversational AI, resulting in 28 files, 2,421+ AI resources aggregated, full Docker deployment.  
-🔗 **GitHub Repository**: https://github.com/GKAYED/ai-news-agent
+**Original Project** (Phase 1): Built in 3 hours through conversational AI with Claude Sonnet 4, resulting in 28 files, 2,421+ AI resources aggregated, full Docker deployment.  
+🔗 **GitHub Repository**: https://github.com/GKAYED/ai-news-agent  
+🔗 **LinkedIn Post**: https://www.linkedin.com/posts/ghaithkayed_github-gkayedai-news-agent-an-intelligent-activity-7386586358481465344-eNFQ
 
 **Experiment Results**: 
 - ✅ **Claude Sonnet 4.5** (Anthropic): 95% spec adherence, 913 items, production-ready (1h 27min)
