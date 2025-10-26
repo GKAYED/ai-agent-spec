@@ -22,7 +22,19 @@ This repository contains **complete, AI-readable specifications** for the AI New
 
 ## 📁 Repository Contents
 
-### Specification Documents (`.specify/memory/`)
+This repository contains specifications, experiment documentation, and three complete AI implementations. Here's what you'll find:
+
+### 📋 Core Documentation (Root Level)
+
+| File | Purpose |
+|------|---------|
+| **README.md** | This file - experiment overview, results, and navigation guide |
+| **EXPERIMENT-REPORT.md** | Comprehensive academic-style report with full methodology and analysis |
+| **EXPERIMENT-GUIDE.md** | Step-by-step instructions for reproducing the experiment |
+| **EXPERIMENT-CONTEXT.md** | Background context and experimental design |
+| **LINKEDIN-POST-DRAFT.md** | Social media posts (short/medium/long forms) for sharing results |
+
+### 📐 Specification Documents (`.specify/memory/`)
 
 | Document | Size | Purpose |
 |----------|------|---------|
@@ -31,7 +43,46 @@ This repository contains **complete, AI-readable specifications** for the AI New
 | **plan.md** | 17,000+ chars | Technology stack, database design, deployment strategy |
 | **tasks.md** | 24,000+ chars | Implementation breakdown (10 phases, 60+ tasks) |
 
-### GitHub Spec Kit Integration (`.github/prompts/`)
+### 🤖 AI Implementations (`implementations/`)
+
+**Three complete implementations from different AI models:**
+
+```
+implementations/
+├── CROSS-MODEL-COMPARISON.md          ← Start here! 3-model side-by-side comparison
+│
+├── implementation-1-claude-sonnet-4.5/
+│   ├── IMPLEMENTATION-ANALYSIS.md     ← Claude deep-dive (624 lines)
+│   ├── METRICS.json                   ← Performance data
+│   ├── SUMMARY.md                     ← Quick overview
+│   ├── TESTED-RESULTS.md              ← Runtime testing results
+│   └── ai-agent/                      ← Full working application (604 LOC)
+│       ├── src/                       ← Source code
+│       ├── public/                    ← Web UI
+│       ├── docker-compose.yml         ← Deployment config
+│       └── package.json               ← Dependencies
+│
+├── implementation-2-GPT-5/
+│   ├── IMPLEMENTATION-ANALYSIS.md     ← GPT-5 deep-dive
+│   └── ai-agent/                      ← Full working application (424 LOC)
+│       ├── 10 documentation files!    ← Exceptional docs
+│       └── (same structure as Claude)
+│
+└── implementation-3-Gemini-2.5-pro/
+    ├── IMPLEMENTATION-ANALYSIS.md     ← Gemini deep-dive (363 lines)
+    ├── METRICS.json                   ← Performance data
+    └── ai-agent/                      ← Working prototype (116 LOC)
+        └── (minimal structure)
+```
+
+**Quick Navigation:**
+- 🎯 **Want the executive summary?** Read `CROSS-MODEL-COMPARISON.md`
+- 📊 **Want detailed analysis?** Read `EXPERIMENT-REPORT.md`
+- 🔍 **Want to understand a specific model?** Read the `IMPLEMENTATION-ANALYSIS.md` in each implementation folder
+- 🚀 **Want to try it yourself?** Read `EXPERIMENT-GUIDE.md`
+- 💬 **Want to share results?** Use drafts in `LINKEDIN-POST-DRAFT.md`
+
+### 🛠️ GitHub Spec Kit Integration (`.github/prompts/`)
 
 8 slash commands for AI-assisted development:
 - `/speckit.constitution` - Project principles
@@ -43,13 +94,39 @@ This repository contains **complete, AI-readable specifications** for the AI New
 - `/speckit.analyze` - Code review
 - `/speckit.checklist` - Quality checks
 
-### Experiment Guide
+### 🧪 Running the Implementations
 
-**`EXPERIMENT-GUIDE.md`** - Complete instructions for Phase 2:
-- How to use specs with fresh AI conversation
-- Success criteria (28 files, 8 API endpoints, 5 UI tabs, voting, journey, celebrations)
-- Comparison methodology
-- Metrics collection template
+All three implementations are **fully functional** and can be run locally:
+
+**Claude Sonnet 4.5 (Port 3000):**
+```bash
+cd implementations/implementation-1-claude-sonnet-4.5/ai-agent
+npm install
+node src/server.js
+# Visit http://localhost:3000
+```
+
+**GPT-5 (Port 3010):**
+```bash
+cd implementations/implementation-2-GPT-5/ai-agent
+npm install
+node src/server.js
+# Visit http://localhost:3010
+```
+
+**Gemini 2.5 Pro (Port 3020):**
+```bash
+cd implementations/implementation-3-Gemini-2.5-pro/ai-agent
+npm install
+node src/server.js
+# Visit http://localhost:3020
+```
+
+**Or run all three simultaneously with Docker:**
+```bash
+# From each implementation's ai-agent folder:
+docker-compose up --build
+```
 
 ---
 
